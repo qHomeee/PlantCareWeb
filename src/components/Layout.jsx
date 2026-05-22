@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Leaf, LogOut, User, ImagePlus, Droplets, Grid3X3 } from "lucide-react";
+import { Droplets, Grid3X3, ImagePlus, Leaf, LogOut, User } from "lucide-react";
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ export default function Layout({ children }) {
     <div className="app-layout">
       <aside className="sidebar">
         <Link to="/gallery" className="logo">
-          <Leaf size={26} />
+          <Leaf size={28} />
           <span>PlantCare</span>
         </Link>
 
