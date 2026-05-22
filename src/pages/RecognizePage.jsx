@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ImagePlus, UploadCloud } from "lucide-react";
 
 import Layout from "../components/Layout";
 import { recognizePlant, mockRecognizePlant } from "../api/plantsApi";
@@ -104,25 +105,41 @@ export default function RecognizePage() {
               <h2>Загрузка фото</h2>
 
               <form className="form" onSubmit={handleRecognize}>
-                <label>
-                  Фотография растения
+                <label className="upload-dropzone">
                   <input
-                    className="input"
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     onChange={handleFileChange}
                   />
-                </label>
 
-                {previewUrl && (
-                  <div className="preview-box">
+                  {previewUrl ? (
                     <img
                       className="preview-image"
                       src={previewUrl}
                       alt="Предпросмотр растения"
                     />
-                  </div>
-                )}
+                  ) : (
+                    <span className="upload-icon">
+                      <UploadCloud size={34} />
+                    </span>
+                  )}
+
+                  <span className="upload-copy">
+                    <strong>
+                      {file ? file.name : "Выберите фото растения"}
+                    </strong>
+                    <small>
+                      {file
+                        ? "Нажмите, чтобы заменить изображение"
+                        : "JPEG, PNG или WebP. Лучше использовать четкое фото листьев."}
+                    </small>
+                  </span>
+
+                  <span className="upload-action">
+                    <ImagePlus size={18} />
+                    Обзор
+                  </span>
+                </label>
 
                 {error && <div className="error">{error}</div>}
 

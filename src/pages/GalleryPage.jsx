@@ -23,6 +23,37 @@ const FILTERS = {
   ok: "По расписанию",
 };
 
+function isWateringDue(item) {
+  if (!item.next_watering_date) {
+    return false;
+  }
+
+  const nextWatering = new Date(`${item.next_watering_date}T00:00:00`);
+
+  if (Number.isNaN(nextWatering.getTime())) {
+    return false;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return nextWatering <= today;
+}
+
+function getWateringLabel(item) {
+  if (isWateringDue(item)) {
+    return "Нужен полив";
+  }
+
+  if (item.next_watering_date) {
+    return `Следующий полив: ${new Date(
+      `${item.next_watering_date}T00:00:00`
+    ).toLocaleDateString("ru-RU")}`;
+  }
+
+  return `Интервал полива: ${item.plant?.watering_interval_days || 0} дн.`;
+}
+
 export default function GalleryPage() {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +89,7 @@ export default function GalleryPage() {
   }, []);
 
   const wateringCount = useMemo(
-    () => plants.filter((item) => Boolean(item.next_watering_date)).length,
+    () => plants.filter((item) => isWateringDue(item)).length,
     [plants]
   );
 
@@ -81,7 +112,7 @@ export default function GalleryPage() {
       const matchesSearch =
         normalizedQuery.length === 0 || values.includes(normalizedQuery);
 
-      const needsWater = Boolean(item.next_watering_date);
+      const needsWater = isWateringDue(item);
       const matchesFilter =
         filterMode === "all" ||
         (filterMode === "needsWater" && needsWater) ||
@@ -251,15 +282,13 @@ export default function GalleryPage() {
                           <p className="gallery-card-subtitle">{subtitle}</p>
 
                           <div className="gallery-meta">
-                            <span className={item.next_watering_date ? "meta-alert" : ""}>
-                              {item.next_watering_date ? (
+                            <span className={isWateringDue(item) ? "meta-alert" : ""}>
+                              {isWateringDue(item) ? (
                                 <AlertTriangle size={16} />
                               ) : (
                                 <Droplet size={16} />
                               )}
-                              {item.next_watering_date
-                                ? "Нужен полив"
-                                : `Полив через ${item.plant?.watering_interval_days || 0} дн.`}
+                              {getWateringLabel(item)}
                             </span>
 
                             <span>
