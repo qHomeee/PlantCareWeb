@@ -69,15 +69,15 @@ export default function RegisterPage() {
       </Link>
 
       <div className="auth-card auth-card-register">
-        <h1 className="auth-title">Create Account</h1>
+        <h1 className="auth-title">Создать аккаунт</h1>
 
         <p className="auth-subtitle">
-          Join our community of plant lovers today
+          Присоединяйтесь к сообществу любителей растений
         </p>
 
         <form className="form auth-form" onSubmit={handleSubmit}>
           <label className="field">
-            <span>Full Name</span>
+            <span>Имя пользователя</span>
             <span className="input-shell">
               <User size={20} />
               <input
@@ -86,7 +86,7 @@ export default function RegisterPage() {
                 name="username"
                 value={form.username}
                 onChange={handleChange}
-                placeholder="Jane Doe"
+                placeholder="Анна"
                 required
                 minLength={2}
                 maxLength={100}
@@ -95,7 +95,7 @@ export default function RegisterPage() {
           </label>
 
           <label className="field">
-            <span>Email Address</span>
+            <span>Email</span>
             <span className="input-shell">
               <Mail size={20} />
               <input
@@ -111,7 +111,7 @@ export default function RegisterPage() {
           </label>
 
           <label className="field">
-            <span>Password</span>
+            <span>Пароль</span>
             <span className="input-shell">
               <Lock size={20} />
               <input
@@ -120,7 +120,7 @@ export default function RegisterPage() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder="Минимум 6 символов"
                 required
                 minLength={6}
               />
@@ -131,13 +131,13 @@ export default function RegisterPage() {
           {error && <div className="error">{error}</div>}
 
           <button className="button auth-submit" type="submit" disabled={loading}>
-            <span>{loading ? "Signing Up..." : "Sign Up"}</span>
+            <span>{loading ? "Регистрация..." : "Зарегистрироваться"}</span>
             <ArrowRight size={20} />
           </button>
         </form>
 
         <p className="auth-footer">
-          Already have an account? <Link to="/login">Log In</Link>
+          Уже есть аккаунт? <Link to="/login">Войти</Link>
         </p>
       </div>
     </div>

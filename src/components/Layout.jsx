@@ -20,18 +20,18 @@ export default function Layout({ children }) {
         <nav className="nav">
           <NavLink to="/gallery" className="nav-link">
             <Sprout size={20} />
-            <span>My Plants</span>
+            <span>Мои растения</span>
           </NavLink>
 
           <NavLink to="/profile" className="nav-link">
             <User size={20} />
-            <span>Profile</span>
+            <span>Профиль</span>
           </NavLink>
         </nav>
 
         <button className="logout-button" onClick={handleLogout}>
           <LogOut size={20} />
-          <span>Log Out</span>
+          <span>Выйти</span>
         </button>
       </aside>
 

@@ -52,25 +52,25 @@ export default function GalleryPage() {
       <div className="page">
         <div className="gallery-container">
           <div className="page-header gallery-header">
-            <h1 className="page-title">My Plants</h1>
+            <h1 className="page-title">Мои растения</h1>
           </div>
 
           <div className="gallery-toolbar">
             <label className="gallery-search">
               <Search size={20} />
-              <input type="search" placeholder="Search your collection..." />
+              <input type="search" placeholder="Поиск по коллекции..." />
             </label>
 
             <button className="gallery-filter" type="button">
               <SlidersHorizontal size={18} />
-              <span>Filter</span>
+              <span>Фильтр</span>
             </button>
           </div>
 
           <div className="stats-grid">
             <div className="stat-card">
               <div>
-                <span>Total Plants</span>
+                <span>Всего растений</span>
                 <strong>{plants.length}</strong>
               </div>
               <Sprout size={24} />
@@ -78,7 +78,7 @@ export default function GalleryPage() {
 
             <div className="stat-card stat-card-alert">
               <div>
-                <span>Need Water</span>
+                <span>Нужен полив</span>
                 <strong>
                   {
                     plants.filter((item) => Boolean(item.next_watering_date))
@@ -115,7 +115,7 @@ export default function GalleryPage() {
           {!loading && !error && plants.length > 0 && (
             <>
               <div className="collection-heading">
-                <h2>Your Collection</h2>
+                <h2>Ваша коллекция</h2>
 
                 <div className="view-toggle">
                   <button type="button">
@@ -130,7 +130,7 @@ export default function GalleryPage() {
               <div className="gallery-grid">
                 {plants.map((item) => {
                   const title =
-                    item.custom_name || item.plant?.common_name || "Plant";
+                    item.custom_name || item.plant?.common_name || "Растение";
 
                   const subtitle = item.plant?.scientific_name || "";
 
@@ -157,24 +157,20 @@ export default function GalleryPage() {
                         <p className="gallery-card-subtitle">{subtitle}</p>
 
                         <div className="gallery-meta">
-                          <span
-                            className={
-                              item.next_watering_date ? "meta-alert" : ""
-                            }
-                          >
+                          <span className={item.next_watering_date ? "meta-alert" : ""}>
                             {item.next_watering_date ? (
                               <AlertTriangle size={16} />
                             ) : (
                               <Droplet size={16} />
                             )}
                             {item.next_watering_date
-                              ? "Overdue"
-                              : `In ${item.plant?.watering_interval_days || 0} days`}
+                              ? "Нужен полив"
+                              : `Полив через ${item.plant?.watering_interval_days || 0} дн.`}
                           </span>
 
                           <span>
                             <Sun size={16} />
-                            {item.plant?.light_info || "Medium Light"}
+                            {item.plant?.light_info || "Средний свет"}
                           </span>
                         </div>
                       </div>
@@ -185,7 +181,7 @@ export default function GalleryPage() {
             </>
           )}
 
-          <Link to="/recognize" className="fab" aria-label="Add plant">
+          <Link to="/recognize" className="fab" aria-label="Добавить растение">
             <ImagePlus size={26} />
           </Link>
         </div>

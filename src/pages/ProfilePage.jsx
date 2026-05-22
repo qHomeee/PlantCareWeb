@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bell, BriefcaseBusiness, Pencil } from "lucide-react";
+import { BriefcaseBusiness, Pencil } from "lucide-react";
 
 import Layout from "../components/Layout";
 import { getMe, updateMe, uploadAvatar } from "../api/usersApi";
@@ -103,13 +103,13 @@ export default function ProfilePage() {
             <>
               <section className="profile-hero">
                 <div className="avatar-box">
-                  <form onSubmit={handleAvatarSubmit}>
-                    <label className="avatar-upload">
+                  <form className="avatar-form" onSubmit={handleAvatarSubmit}>
+                    <div className="avatar-upload">
                       {user.avatar_url ? (
                         <img
                           className="avatar-image"
                           src={getMediaUrl(user.avatar_url)}
-                          alt="Profile"
+                          alt="Аватар профиля"
                         />
                       ) : (
                         <div className="avatar-placeholder">
@@ -117,21 +117,31 @@ export default function ProfilePage() {
                         </div>
                       )}
                       <input
+                        id="avatar-file"
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
                         onChange={(event) =>
                           setAvatarFile(event.target.files?.[0] || null)
                         }
                       />
-                      <button
+                      <label
+                        htmlFor="avatar-file"
                         className="avatar-edit"
-                        type="submit"
-                        disabled={saving || !avatarFile}
-                        aria-label="Upload avatar"
+                        aria-label="Выбрать аватар"
                       >
                         <Pencil size={18} />
+                      </label>
+                    </div>
+
+                    {avatarFile && (
+                      <button
+                        className="button avatar-submit"
+                        type="submit"
+                        disabled={saving}
+                      >
+                        {saving ? "Загрузка..." : "Загрузить аватар"}
                       </button>
-                    </label>
+                    )}
                   </form>
                 </div>
 
@@ -145,12 +155,12 @@ export default function ProfilePage() {
                 <div className="card profile-panel">
                   <h2>
                     <BriefcaseBusiness size={22} />
-                    <span>Personal Information</span>
+                    <span>Личная информация</span>
                   </h2>
 
                   <form className="form" onSubmit={handleProfileSubmit}>
                     <label>
-                      Full Name
+                      Имя пользователя
                       <input
                         className="input"
                         type="text"
@@ -163,24 +173,9 @@ export default function ProfilePage() {
                     </label>
 
                     <button className="button full" type="submit" disabled={saving}>
-                      {saving ? "Saving..." : "Save Changes"}
+                      {saving ? "Сохранение..." : "Сохранить изменения"}
                     </button>
                   </form>
-                </div>
-
-                <div className="card profile-panel notifications-panel">
-                  <h2>
-                    <Bell size={22} />
-                    <span>Notifications</span>
-                  </h2>
-
-                  <div className="notification-row">
-                    <div>
-                      <h3>Watering Reminders</h3>
-                      <p>Daily alerts for thirsty plants</p>
-                    </div>
-                    <span className="toggle-switch" />
-                  </div>
                 </div>
               </div>
 

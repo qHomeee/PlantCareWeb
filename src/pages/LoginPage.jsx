@@ -54,14 +54,14 @@ export default function LoginPage() {
       </Link>
 
       <div className="auth-card">
-        <h1 className="auth-title">Welcome back</h1>
+        <h1 className="auth-title">С возвращением</h1>
         <p className="auth-subtitle">
-          Sign in to your botanical dashboard
+          Войдите в свой ботанический кабинет
         </p>
 
         <form className="form auth-form" onSubmit={handleSubmit}>
           <label className="field">
-            <span>Email Address</span>
+            <span>Email</span>
             <span className="input-shell">
               <Mail size={20} />
               <input
@@ -77,7 +77,7 @@ export default function LoginPage() {
           </label>
 
           <label className="field">
-            <span>Password</span>
+            <span>Пароль</span>
             <span className="input-shell">
               <Lock size={20} />
               <input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                placeholder="••••••••"
+                placeholder="Введите пароль"
                 required
               />
               <Eye size={20} />
@@ -96,13 +96,13 @@ export default function LoginPage() {
           {error && <div className="error">{error}</div>}
 
           <button className="button auth-submit" type="submit" disabled={loading}>
-            <span>{loading ? "Signing In..." : "Sign In"}</span>
+            <span>{loading ? "Вход..." : "Войти"}</span>
             <ArrowRight size={20} />
           </button>
         </form>
 
         <p className="auth-footer">
-          New to PlantCare? <Link to="/register">Create an account</Link>
+          Нет аккаунта? <Link to="/register">Создать аккаунт</Link>
         </p>
       </div>
     </div>
