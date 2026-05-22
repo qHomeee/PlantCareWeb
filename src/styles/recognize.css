@@ -1,8 +1,9 @@
 .recognize-grid {
   display: grid;
-  grid-template-columns: 420px minmax(0, 1fr);
+  grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
   gap: 24px;
   align-items: start;
+  padding-top: 8px;
 }
 
 .recognize-actions {
@@ -12,9 +13,8 @@
 
 .preview-box {
   overflow: hidden;
-  border-radius: 18px;
-  border: 1px solid #e4eee4;
-  background: #f8fbf8;
+  border-radius: 12px;
+  background: var(--surface-muted);
 }
 
 .preview-image {
@@ -33,14 +33,14 @@
   width: 100%;
   max-height: 340px;
   object-fit: cover;
-  border-radius: 18px;
-  background: #eef7ee;
+  border-radius: 12px;
+  background: var(--surface-muted);
 }
 
-.info-list {
-  display: grid;
-  gap: 10px;
-  margin: 18px 0;
+.plant-result h3 {
+  margin: 0 0 4px;
+  color: var(--green);
+  font-size: 28px;
 }
 
 @media (max-width: 1000px) {

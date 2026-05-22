@@ -1,14 +1,10 @@
-.care-container {
-  width: 100%;
-  max-width: 1120px;
-}
-
 .care-header {
+  min-height: 46px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 24px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .care-filters {
@@ -18,12 +14,12 @@
 }
 
 .care-filter {
-  width: 240px;
+  width: 230px;
 }
 
 .care-list {
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 .care-event {
@@ -43,42 +39,45 @@
   width: fit-content;
   border-radius: 999px;
   padding: 6px 12px;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   margin-bottom: 12px;
 }
 
 .care-status-planned {
-  background: #e8f2e8;
-  color: #2f7d32;
+  background: var(--surface-soft);
+  color: var(--green);
 }
 
 .care-status-completed {
-  background: #e6f4ea;
-  color: #137333;
+  background: #eff7f2;
+  color: var(--green);
 }
 
 .care-status-skipped {
-  background: #fff4e5;
-  color: #b26a00;
+  background: #fff4f4;
+  color: var(--red);
 }
 
 .care-event-title {
   margin: 0;
-  font-size: 22px;
-  line-height: 1.25;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.15;
 }
 
 .care-event-subtitle {
   margin: 4px 0 14px;
-  color: #667766;
+  color: var(--muted);
   font-style: italic;
 }
 
 .care-event-info {
   display: grid;
   gap: 8px;
-  color: #526452;
+  color: var(--muted);
   line-height: 1.45;
 }
 
@@ -90,28 +89,26 @@
 }
 
 .care-action-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   white-space: nowrap;
 }
 
 .care-empty {
-  max-width: 760px;
-  padding: 56px 32px;
+  max-width: 752px;
+  padding: 58px 32px;
   text-align: center;
 }
 
 .care-empty h2 {
   margin: 18px 0 8px;
+  color: var(--green);
   font-size: 28px;
+  line-height: 1.1;
 }
 
 .care-empty p {
   margin: 0 auto;
   max-width: 520px;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .care-empty-icon {
@@ -121,12 +118,17 @@
   display: grid;
   place-items: center;
   border-radius: 999px;
-  background: #eef7ee;
-  color: #2f7d32;
+  background: var(--surface-soft);
+  color: var(--green);
 }
 
 @media (max-width: 900px) {
   .care-header {
+    display: grid;
+    align-items: start;
+  }
+
+  .care-filters {
     display: grid;
   }
 
