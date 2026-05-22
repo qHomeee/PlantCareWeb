@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Eye, Leaf, Lock, Mail } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Leaf, Lock, Mail } from "lucide-react";
 
 import { loginUser } from "../api/authApi";
 
@@ -14,6 +14,7 @@ export default function LoginPage() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -82,14 +83,21 @@ export default function LoginPage() {
               <Lock size={20} />
               <input
                 className="input"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={form.password}
                 onChange={handleChange}
                 placeholder="Введите пароль"
                 required
               />
-              <Eye size={20} />
+              <button
+                className="password-toggle"
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </span>
           </label>
 

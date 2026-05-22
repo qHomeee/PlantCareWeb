@@ -94,6 +94,21 @@
   box-shadow: var(--shadow-deep);
 }
 
+.password-toggle {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #7b837c;
+}
+
+.password-toggle:hover {
+  color: var(--green);
+}
+
 .auth-footer {
   margin: 31px 0 0;
   color: #4e514f;

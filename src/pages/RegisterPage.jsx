@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Eye, Leaf, Lock, Mail, User } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Leaf, Lock, Mail, User } from "lucide-react";
 
 import { registerUser } from "../api/authApi";
 
@@ -15,6 +15,7 @@ export default function RegisterPage() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -116,7 +117,7 @@ export default function RegisterPage() {
               <Lock size={20} />
               <input
                 className="input"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={form.password}
                 onChange={handleChange}
@@ -124,7 +125,14 @@ export default function RegisterPage() {
                 required
                 minLength={6}
               />
-              <Eye size={20} />
+              <button
+                className="password-toggle"
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </span>
           </label>
 
