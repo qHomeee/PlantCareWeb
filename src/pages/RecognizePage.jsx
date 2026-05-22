@@ -48,7 +48,9 @@ export default function RecognizePage() {
       console.log("RECOGNIZE ERROR:", error);
 
       const detail = error.response?.data?.detail;
-      setError(typeof detail === "string" ? detail : "Не удалось распознать растение");
+      setError(
+        typeof detail === "string" ? detail : "Не удалось распознать растение"
+      );
     } finally {
       setLoading(false);
     }
@@ -66,7 +68,11 @@ export default function RecognizePage() {
       console.log("MOCK RECOGNIZE ERROR:", error);
 
       const detail = error.response?.data?.detail;
-      setError(typeof detail === "string" ? detail : "Не удалось выполнить тестовое распознавание");
+      setError(
+        typeof detail === "string"
+          ? detail
+          : "Не удалось выполнить тестовое распознавание"
+      );
     } finally {
       setLoading(false);
     }
@@ -88,7 +94,8 @@ export default function RecognizePage() {
           <div className="page-header">
             <h1 className="page-title">Распознавание растения</h1>
             <p className="page-subtitle">
-              Загрузите фотографию растения, чтобы определить его вид и получить рекомендации по уходу.
+              Загрузите фотографию растения, чтобы определить его вид и получить
+              рекомендации по уходу.
             </p>
           </div>
 
@@ -119,18 +126,20 @@ export default function RecognizePage() {
 
                 {error && <div className="error">{error}</div>}
 
-                <button className="button" type="submit" disabled={loading}>
-                  {loading ? "Распознавание..." : "Распознать растение"}
-                </button>
+                <div className="recognize-actions">
+                  <button className="button full" type="submit" disabled={loading}>
+                    {loading ? "Распознавание..." : "Распознать растение"}
+                  </button>
 
-                <button
-                  className="button secondary"
-                  type="button"
-                  onClick={handleMockRecognize}
-                  disabled={loading}
-                >
-                  Тестовое распознавание
-                </button>
+                  <button
+                    className="button secondary full"
+                    type="button"
+                    onClick={handleMockRecognize}
+                    disabled={loading}
+                  >
+                    Тестовое распознавание
+                  </button>
+                </div>
               </form>
             </div>
 
@@ -165,13 +174,14 @@ export default function RecognizePage() {
                       </div>
 
                       <div>
-                        <strong>Полив:</strong>{" "}
-                        каждые {result.watering_interval_days} дн.
+                        <strong>Полив:</strong> каждые{" "}
+                        {result.watering_interval_days} дн.
                       </div>
 
                       <div>
                         <strong>Температура:</strong>{" "}
-                        {result.min_temperature_celsius}–{result.max_temperature_celsius} °C
+                        {result.min_temperature_celsius}–
+                        {result.max_temperature_celsius} °C
                       </div>
 
                       <div>

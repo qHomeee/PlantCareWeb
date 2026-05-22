@@ -1,8 +1,13 @@
 .recognize-grid {
   display: grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: 420px minmax(0, 1fr);
   gap: 24px;
   align-items: start;
+}
+
+.recognize-actions {
+  display: grid;
+  gap: 12px;
 }
 
 .preview-box {
@@ -29,6 +34,7 @@
   max-height: 340px;
   object-fit: cover;
   border-radius: 18px;
+  background: #eef7ee;
 }
 
 .info-list {
@@ -37,7 +43,7 @@
   margin: 18px 0;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .recognize-grid {
     grid-template-columns: 1fr;
   }
