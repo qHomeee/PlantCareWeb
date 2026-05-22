@@ -33,7 +33,7 @@ button {
 
 .page {
   min-height: 100vh;
-  padding: 32px;
+  padding: 32px 40px;
 }
 
 .container {
@@ -110,10 +110,9 @@ button {
 
 .page-title {
   margin: 0;
-  font-size: 42px;
+  font-size: 36px;
   line-height: 1.1;
 }
-
 .page-subtitle {
   margin: 10px 0 0;
   color: #667766;

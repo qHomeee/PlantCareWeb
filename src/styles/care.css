@@ -1,16 +1,148 @@
+.care-container {
+  width: 100%;
+  max-width: 1120px;
+}
+
+.care-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.care-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.care-filter {
+  width: 240px;
+}
+
 .care-list {
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .care-event {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: start;
+  text-align: left;
+}
+
+.care-event-main {
+  min-width: 0;
+  text-align: left;
+}
+
+.care-status {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.care-status-planned {
+  background: #e8f2e8;
+  color: #2f7d32;
+}
+
+.care-status-completed {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.care-status-skipped {
+  background: #fff4e5;
+  color: #b26a00;
+}
+
+.care-event-title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.care-event-subtitle {
+  margin: 4px 0 14px;
+  color: #667766;
+  font-style: italic;
+}
+
+.care-event-info {
+  display: grid;
+  gap: 8px;
+  color: #526452;
+  line-height: 1.45;
 }
 
 .care-event-actions {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.care-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.care-empty {
+  max-width: 760px;
+  padding: 56px 32px;
+  text-align: center;
+}
+
+.care-empty h2 {
+  margin: 18px 0 8px;
+  font-size: 28px;
+}
+
+.care-empty p {
+  margin: 0 auto;
+  max-width: 520px;
+  font-size: 18px;
+}
+
+.care-empty-icon {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #eef7ee;
+  color: #2f7d32;
+}
+
+@media (max-width: 900px) {
+  .care-header {
+    display: grid;
+  }
+
+  .care-filter {
+    width: 100%;
+  }
+
+  .care-event {
+    grid-template-columns: 1fr;
+  }
+
+  .care-event-actions {
+    justify-content: stretch;
+  }
+
+  .care-action-button {
+    flex: 1;
+  }
 }
