@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Bell, BriefcaseBusiness, Pencil } from "lucide-react";
 
 import Layout from "../components/Layout";
 import { getMe, updateMe, uploadAvatar } from "../api/usersApi";
@@ -99,74 +100,95 @@ export default function ProfilePage() {
           {loading && <div className="card">Загрузка профиля...</div>}
 
           {!loading && user && (
-            <div className="profile-grid">
-              <div className="card profile-card">
+            <>
+              <section className="profile-hero">
                 <div className="avatar-box">
-                  {user.avatar_url ? (
-                    <img
-                      className="avatar-image"
-                      src={getMediaUrl(user.avatar_url)}
-                      alt="Аватар пользователя"
-                    />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      {user.username?.[0]?.toUpperCase() || "U"}
-                    </div>
-                  )}
+                  <form onSubmit={handleAvatarSubmit}>
+                    <label className="avatar-upload">
+                      {user.avatar_url ? (
+                        <img
+                          className="avatar-image"
+                          src={getMediaUrl(user.avatar_url)}
+                          alt="Profile"
+                        />
+                      ) : (
+                        <div className="avatar-placeholder">
+                          {user.username?.[0]?.toUpperCase() || "U"}
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={(event) =>
+                          setAvatarFile(event.target.files?.[0] || null)
+                        }
+                      />
+                      <button
+                        className="avatar-edit"
+                        type="submit"
+                        disabled={saving || !avatarFile}
+                        aria-label="Upload avatar"
+                      >
+                        <Pencil size={18} />
+                      </button>
+                    </label>
+                  </form>
                 </div>
 
-                <h2>{user.username}</h2>
-                <p className="muted">{user.email}</p>
+                <div className="profile-heading">
+                  <h2>{user.username}</h2>
+                  <p>{user.email}</p>
+                </div>
+              </section>
+
+              <div className="profile-grid">
+                <div className="card profile-panel">
+                  <h2>
+                    <BriefcaseBusiness size={22} />
+                    <span>Personal Information</span>
+                  </h2>
+
+                  <form className="form" onSubmit={handleProfileSubmit}>
+                    <label>
+                      Full Name
+                      <input
+                        className="input"
+                        type="text"
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
+                        minLength={2}
+                        maxLength={100}
+                        required
+                      />
+                    </label>
+
+                    <button className="button full" type="submit" disabled={saving}>
+                      {saving ? "Saving..." : "Save Changes"}
+                    </button>
+                  </form>
+                </div>
+
+                <div className="card profile-panel notifications-panel">
+                  <h2>
+                    <Bell size={22} />
+                    <span>Notifications</span>
+                  </h2>
+
+                  <div className="notification-row">
+                    <div>
+                      <h3>Watering Reminders</h3>
+                      <p>Daily alerts for thirsty plants</p>
+                    </div>
+                    <span className="toggle-switch" />
+                  </div>
+                </div>
               </div>
 
-              <div className="card">
-                <h2>Данные профиля</h2>
-
-                <form className="form" onSubmit={handleProfileSubmit}>
-                  <label>
-                    Имя пользователя
-                    <input
-                      className="input"
-                      type="text"
-                      value={username}
-                      onChange={(event) => setUsername(event.target.value)}
-                      minLength={2}
-                      maxLength={100}
-                      required
-                    />
-                  </label>
-
-                  <button className="button" type="submit" disabled={saving}>
-                    {saving ? "Сохранение..." : "Сохранить"}
-                  </button>
-                </form>
-
-                <hr className="divider" />
-
-                <h2>Аватар</h2>
-
-                <form className="form" onSubmit={handleAvatarSubmit}>
-                  <label>
-                    Фото профиля
-                    <input
-                      className="input"
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      onChange={(event) =>
-                        setAvatarFile(event.target.files?.[0] || null)
-                      }
-                    />
-                  </label>
-
-                  <button className="button secondary" type="submit" disabled={saving}>
-                    {saving ? "Загрузка..." : "Загрузить аватар"}
-                  </button>
-                </form>
-
+              <div className="profile-messages">
                 {error && <p className="error">{error}</p>}
                 {message && <p className="success">{message}</p>}
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
