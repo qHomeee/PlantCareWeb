@@ -1,3 +1,22 @@
+:root {
+  --app-bg: #f8f8fc;
+  --surface: #ffffff;
+  --surface-muted: #f1f4f2;
+  --surface-soft: #eef8ef;
+  --ink: #171927;
+  --green: #123f17;
+  --green-2: #1b5524;
+  --green-muted: #a8d9aa;
+  --muted: #5f625f;
+  --subtle: #777d86;
+  --line: #e1e2e8;
+  --line-strong: #c9cbd4;
+  --red: #d3121d;
+  --red-soft: #fff4f4;
+  --shadow: 0 16px 34px rgba(16, 24, 40, 0.08);
+  --shadow-deep: 0 18px 28px rgba(18, 63, 23, 0.28);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -9,11 +28,8 @@ body,
 }
 
 body {
-  margin: 0;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  background: #f4f8f4;
-  color: #172417;
+  background: var(--app-bg);
+  color: var(--ink);
 }
 
 a {
@@ -23,6 +39,7 @@ a {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -31,22 +48,47 @@ button {
   cursor: pointer;
 }
 
-.page {
-  min-height: 100vh;
-  padding: 32px 40px;
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(18, 63, 23, 0.18);
+  outline-offset: 2px;
 }
 
-.container {
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 0 24px 48px;
+}
+
+.container,
+.gallery-container,
+.care-container,
+.confirm-container {
   width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
+  max-width: 976px;
 }
 
 .card {
-  background: #ffffff;
-  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid rgba(225, 226, 232, 0.72);
+  border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 12px 30px rgba(40, 80, 40, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.card h2,
+.card h3 {
+  margin-top: 0;
+  color: var(--green);
 }
 
 .form {
@@ -54,67 +96,251 @@ button {
   gap: 16px;
 }
 
-.input {
-  width: 100%;
-  border: 1px solid #d9e4d9;
-  border-radius: 14px;
-  padding: 12px 14px;
-  background: white;
+.field,
+.form label {
+  display: grid;
+  gap: 7px;
+  color: #3f423f;
+  font-size: 13px;
+  font-weight: 700;
 }
 
-.button {
+.input,
+.input-shell {
+  width: 100%;
+  min-height: 49px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.input {
+  padding: 13px 16px;
+  outline: none;
+}
+
+.input-shell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  color: #7b837c;
+}
+
+.input-shell .input {
+  min-height: auto;
+  flex: 1;
+  padding: 0;
+  background: transparent;
+}
+
+.input::placeholder {
+  color: #9ba19d;
+  opacity: 1;
+}
+
+.input:focus,
+.input-shell:focus-within {
+  box-shadow: 0 0 0 3px rgba(18, 63, 23, 0.12);
+}
+
+.button,
+.danger-button {
   width: fit-content;
-  border: none;
+  min-height: 42px;
+  border: 0;
   border-radius: 14px;
-  padding: 12px 18px;
-  background: #2f7d32;
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--green);
   color: white;
-  font-weight: 600;
+  font-weight: 800;
+  line-height: 1;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.button:hover,
+.danger-button:hover {
+  transform: translateY(-1px);
+  background: var(--green-2);
 }
 
 .button.full {
   width: 100%;
 }
 
-.button:disabled {
-  opacity: 0.7;
+.button:disabled,
+.danger-button:disabled {
+  opacity: 0.62;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .button.secondary {
-  background: #e8f2e8;
-  color: #2f7d32;
+  background: #f7faf8;
+  border: 1px solid var(--line-strong);
+  color: var(--green);
+}
+
+.danger-button {
+  margin-top: 18px;
+  background: #ffd8d4;
+  color: #b0000b;
 }
 
 .error {
-  color: #b42318;
+  color: var(--red);
 }
 
 .success {
-  color: #2f7d32;
+  color: var(--green);
+  font-weight: 700;
 }
 
 .muted {
-  color: #667766;
+  color: var(--muted);
 }
 
 .divider {
   border: none;
-  border-top: 1px solid #e4eee4;
+  border-top: 1px solid var(--line);
   margin: 28px 0;
 }
 
 .page-header {
-  margin-bottom: 24px;
+  margin-bottom: 34px;
 }
 
 .page-title {
   margin: 0;
-  font-size: 36px;
-  line-height: 1.1;
+  color: var(--green);
+  font-size: 22px;
+  line-height: 1.28;
+  font-weight: 900;
 }
+
 .page-subtitle {
-  margin: 10px 0 0;
-  color: #667766;
-  font-size: 18px;
+  margin: 8px 0 0;
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.back-link {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.info-list,
+.detail-list {
+  display: grid;
+  gap: 12px;
+}
+
+.info-list > div,
+.detail-list > div {
+  border-radius: 12px;
+  padding: 13px 14px;
+  background: var(--surface-muted);
+}
+
+.detail-list p,
+.care-preview p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.plant-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.plant-detail-content {
+  display: grid;
+  gap: 20px;
+}
+
+.plant-detail-image,
+.plant-detail-image-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: var(--surface-muted);
+}
+
+.plant-detail-image {
+  display: block;
+  object-fit: cover;
+}
+
+.plant-detail-image-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  font-weight: 800;
+}
+
+.plant-detail-title {
+  margin: 18px 0 4px;
+  color: var(--green);
+  font-size: 30px;
+  line-height: 1.05;
+}
+
+.watering-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.watering-summary > div,
+.plant-event-row {
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--surface-muted);
+}
+
+.watering-summary span,
+.watering-summary strong {
+  display: block;
+}
+
+.plant-events {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.plant-event-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 0 18px 36px;
+  }
+
+  .plant-detail-grid,
+  .watering-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 20px;
+  }
 }

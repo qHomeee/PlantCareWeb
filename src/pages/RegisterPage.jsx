@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Eye, Leaf, Lock, Mail, User } from "lucide-react";
 
 import { registerUser } from "../api/authApi";
 
@@ -62,65 +63,81 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-page">
-      <div className="card auth-card">
-        <h1 className="auth-title">Регистрация</h1>
+      <Link to="/login" className="auth-brand">
+        <Leaf size={22} fill="currentColor" />
+        <span>PlantCare</span>
+      </Link>
+
+      <div className="auth-card auth-card-register">
+        <h1 className="auth-title">Create Account</h1>
 
         <p className="auth-subtitle">
-          Создайте аккаунт для хранения своей коллекции растений.
+          Join our community of plant lovers today
         </p>
 
-        <form className="form" onSubmit={handleSubmit}>
-          <label>
-            Email
-            <input
-              className="input"
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="user@example.com"
-              required
-            />
+        <form className="form auth-form" onSubmit={handleSubmit}>
+          <label className="field">
+            <span>Full Name</span>
+            <span className="input-shell">
+              <User size={20} />
+              <input
+                className="input"
+                type="text"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="Jane Doe"
+                required
+                minLength={2}
+                maxLength={100}
+              />
+            </span>
           </label>
 
-          <label>
-            Имя пользователя
-            <input
-              className="input"
-              type="text"
-              name="username"
-              value={form.username}
-              onChange={handleChange}
-              placeholder="Введите имя"
-              required
-              minLength={2}
-              maxLength={100}
-            />
+          <label className="field">
+            <span>Email Address</span>
+            <span className="input-shell">
+              <Mail size={20} />
+              <input
+                className="input"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="hello@plantcare.com"
+                required
+              />
+            </span>
           </label>
 
-          <label>
-            Пароль
-            <input
-              className="input"
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Минимум 6 символов"
-              required
-              minLength={6}
-            />
+          <label className="field">
+            <span>Password</span>
+            <span className="input-shell">
+              <Lock size={20} />
+              <input
+                className="input"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+                minLength={6}
+              />
+              <Eye size={20} />
+            </span>
           </label>
 
           {error && <div className="error">{error}</div>}
 
-          <button className="button" type="submit" disabled={loading}>
-            {loading ? "Регистрация..." : "Зарегистрироваться"}
+          <button className="button auth-submit" type="submit" disabled={loading}>
+            <span>{loading ? "Signing Up..." : "Sign Up"}</span>
+            <ArrowRight size={20} />
           </button>
         </form>
 
         <p className="auth-footer">
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
+          Already have an account? <Link to="/login">Log In</Link>
         </p>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, Eye, Leaf, Lock, Mail } from "lucide-react";
 
 import { loginUser } from "../api/authApi";
 
@@ -47,48 +48,61 @@ export default function LoginPage() {
 
   return (
     <div className="auth-page">
-      <div className="card auth-card">
-        <h1 className="auth-title">Вход</h1>
+      <Link to="/login" className="auth-brand">
+        <Leaf size={22} fill="currentColor" />
+        <span>PlantCare</span>
+      </Link>
+
+      <div className="auth-card">
+        <h1 className="auth-title">Welcome back</h1>
         <p className="auth-subtitle">
-          Войдите в аккаунт, чтобы управлять своими растениями.
+          Sign in to your botanical dashboard
         </p>
 
-        <form className="form" onSubmit={handleSubmit}>
-          <label>
-            Email
-            <input
-              className="input"
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="user@example.com"
-              required
-            />
+        <form className="form auth-form" onSubmit={handleSubmit}>
+          <label className="field">
+            <span>Email Address</span>
+            <span className="input-shell">
+              <Mail size={20} />
+              <input
+                className="input"
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="hello@plantcare.com"
+                required
+              />
+            </span>
           </label>
 
-          <label>
-            Пароль
-            <input
-              className="input"
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Введите пароль"
-              required
-            />
+          <label className="field">
+            <span>Password</span>
+            <span className="input-shell">
+              <Lock size={20} />
+              <input
+                className="input"
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+              />
+              <Eye size={20} />
+            </span>
           </label>
 
           {error && <div className="error">{error}</div>}
 
-          <button className="button" type="submit" disabled={loading}>
-            {loading ? "Вход..." : "Войти"}
+          <button className="button auth-submit" type="submit" disabled={loading}>
+            <span>{loading ? "Signing In..." : "Sign In"}</span>
+            <ArrowRight size={20} />
           </button>
         </form>
 
         <p className="auth-footer">
-          Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+          New to PlantCare? <Link to="/register">Create an account</Link>
         </p>
       </div>
     </div>
