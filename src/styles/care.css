@@ -1,0 +1,16 @@
+.care-list {
+  display: grid;
+  gap: 14px;
+}
+
+.care-event {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.care-event-actions {
+  display: flex;
+  gap: 10px;
+}
