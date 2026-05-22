@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Droplets, Grid3X3, ImagePlus, Leaf, LogOut, User } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Leaf, LogOut, Sprout, User } from "lucide-react";
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
@@ -13,35 +13,25 @@ export default function Layout({ children }) {
     <div className="app-layout">
       <aside className="sidebar">
         <Link to="/gallery" className="logo">
-          <Leaf size={28} />
+          <Leaf size={26} fill="currentColor" />
           <span>PlantCare</span>
         </Link>
 
         <nav className="nav">
-          <Link to="/gallery" className="nav-link">
-            <Grid3X3 size={20} />
-            <span>Галерея</span>
-          </Link>
+          <NavLink to="/gallery" className="nav-link">
+            <Sprout size={20} />
+            <span>My Plants</span>
+          </NavLink>
 
-          <Link to="/recognize" className="nav-link">
-            <ImagePlus size={20} />
-            <span>Распознать</span>
-          </Link>
-
-          <Link to="/care" className="nav-link">
-            <Droplets size={20} />
-            <span>Полив</span>
-          </Link>
-
-          <Link to="/profile" className="nav-link">
+          <NavLink to="/profile" className="nav-link">
             <User size={20} />
-            <span>Профиль</span>
-          </Link>
+            <span>Profile</span>
+          </NavLink>
         </nav>
 
         <button className="logout-button" onClick={handleLogout}>
           <LogOut size={20} />
-          <span>Выйти</span>
+          <span>Log Out</span>
         </button>
       </aside>
 

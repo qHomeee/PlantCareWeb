@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ImagePlus, Leaf } from "lucide-react";
+import {
+  AlertTriangle,
+  Droplet,
+  Grid3X3,
+  ImagePlus,
+  Leaf,
+  List,
+  Search,
+  SlidersHorizontal,
+  Sprout,
+  Sun,
+} from "lucide-react";
 
 import Layout from "../components/Layout";
 import { getGallery } from "../api/galleryApi";
@@ -41,17 +52,42 @@ export default function GalleryPage() {
       <div className="page">
         <div className="gallery-container">
           <div className="page-header gallery-header">
-            <div>
-              <h1 className="page-title">Галерея</h1>
-              <p className="page-subtitle">
-                Ваша персональная коллекция растений.
-              </p>
+            <h1 className="page-title">My Plants</h1>
+          </div>
+
+          <div className="gallery-toolbar">
+            <label className="gallery-search">
+              <Search size={20} />
+              <input type="search" placeholder="Search your collection..." />
+            </label>
+
+            <button className="gallery-filter" type="button">
+              <SlidersHorizontal size={18} />
+              <span>Filter</span>
+            </button>
+          </div>
+
+          <div className="stats-grid">
+            <div className="stat-card">
+              <div>
+                <span>Total Plants</span>
+                <strong>{plants.length}</strong>
+              </div>
+              <Sprout size={24} />
             </div>
 
-            <Link to="/recognize" className="button gallery-add-button">
-              <ImagePlus size={20} />
-              <span>Добавить растение</span>
-            </Link>
+            <div className="stat-card stat-card-alert">
+              <div>
+                <span>Need Water</span>
+                <strong>
+                  {
+                    plants.filter((item) => Boolean(item.next_watering_date))
+                      .length
+                  }
+                </strong>
+              </div>
+              <Droplet size={24} />
+            </div>
           </div>
 
           {loading && <div className="card">Загрузка галереи...</div>}
@@ -77,48 +113,81 @@ export default function GalleryPage() {
           )}
 
           {!loading && !error && plants.length > 0 && (
-            <div className="gallery-grid">
-              {plants.map((item) => {
-                const title =
-                  item.custom_name || item.plant?.common_name || "Растение";
+            <>
+              <div className="collection-heading">
+                <h2>Your Collection</h2>
 
-                const subtitle = item.plant?.scientific_name || "";
+                <div className="view-toggle">
+                  <button type="button">
+                    <Grid3X3 size={20} />
+                  </button>
+                  <button type="button">
+                    <List size={20} />
+                  </button>
+                </div>
+              </div>
 
-                return (
-                  <Link
-                    key={item.id}
-                    to={`/gallery/${item.id}`}
-                    className="card gallery-card"
-                  >
-                    {item.image_url ? (
-                      <img
-                        className="gallery-image"
-                        src={getMediaUrl(item.image_url)}
-                        alt={title}
-                      />
-                    ) : (
-                      <div className="gallery-image-placeholder">
-                        <Leaf size={40} />
-                      </div>
-                    )}
+              <div className="gallery-grid">
+                {plants.map((item) => {
+                  const title =
+                    item.custom_name || item.plant?.common_name || "Plant";
 
-                    <h2 className="gallery-card-title">{title}</h2>
-                    <p className="gallery-card-subtitle">{subtitle}</p>
+                  const subtitle = item.plant?.scientific_name || "";
 
-                    <div className="gallery-meta">
-                      <span>
-                        Полив: каждые {item.plant?.watering_interval_days} дн.
-                      </span>
-
-                      {item.next_watering_date && (
-                        <span>Следующий: {item.next_watering_date}</span>
+                  return (
+                    <Link
+                      key={item.id}
+                      to={`/gallery/${item.id}`}
+                      className="gallery-card"
+                    >
+                      {item.image_url ? (
+                        <img
+                          className="gallery-image"
+                          src={getMediaUrl(item.image_url)}
+                          alt={title}
+                        />
+                      ) : (
+                        <div className="gallery-image-placeholder">
+                          <Leaf size={40} />
+                        </div>
                       )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+
+                      <div className="gallery-card-body">
+                        <h3 className="gallery-card-title">{title}</h3>
+                        <p className="gallery-card-subtitle">{subtitle}</p>
+
+                        <div className="gallery-meta">
+                          <span
+                            className={
+                              item.next_watering_date ? "meta-alert" : ""
+                            }
+                          >
+                            {item.next_watering_date ? (
+                              <AlertTriangle size={16} />
+                            ) : (
+                              <Droplet size={16} />
+                            )}
+                            {item.next_watering_date
+                              ? "Overdue"
+                              : `In ${item.plant?.watering_interval_days || 0} days`}
+                          </span>
+
+                          <span>
+                            <Sun size={16} />
+                            {item.plant?.light_info || "Medium Light"}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </>
           )}
+
+          <Link to="/recognize" className="fab" aria-label="Add plant">
+            <ImagePlus size={26} />
+          </Link>
         </div>
       </div>
     </Layout>
