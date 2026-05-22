@@ -79,13 +79,13 @@ export default function RecognizePage() {
   }
 
   function handleConfirm() {
-    if (!result) {
-      return;
-    }
-
-    sessionStorage.setItem("recognized_plant", JSON.stringify(result));
-    navigate("/confirm-plant");
+  if (!result) {
+    return;
   }
+
+  sessionStorage.setItem("recognized_plant", JSON.stringify(result));
+  navigate("/confirm-plant");
+}
 
   return (
     <Layout>
