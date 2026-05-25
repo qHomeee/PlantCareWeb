@@ -9,11 +9,13 @@ import {
   updateGalleryItem,
 } from "../api/galleryApi";
 import { getPlantWateringEvents } from "../api/careApi";
+import { useLanguage } from "../i18n/LanguageContext";
 import { getMediaUrl } from "../utils/media";
 
 export default function GalleryItemPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [item, setItem] = useState(null);
   const [wateringEvents, setWateringEvents] = useState([]);
@@ -44,7 +46,7 @@ export default function GalleryItemPage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось загрузить растение"
+          : t("loadPlantFailed")
       );
     } finally {
       setLoading(false);
@@ -73,7 +75,7 @@ export default function GalleryItemPage() {
       });
 
       setItem(updatedItem);
-      setMessage("Название растения обновлено");
+      setMessage(t("plantNameUpdated"));
     } catch (error) {
       console.log("UPDATE GALLERY ITEM ERROR:", error);
 
@@ -81,7 +83,7 @@ export default function GalleryItemPage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось обновить растение"
+          : t("updatePlantFailed")
       );
     } finally {
       setSaving(false);
@@ -90,7 +92,7 @@ export default function GalleryItemPage() {
 
   async function handleDelete() {
     const isConfirmed = window.confirm(
-      "Удалить растение из галереи? Это действие нельзя отменить."
+      t("deleteConfirm")
     );
 
     if (!isConfirmed) {
@@ -110,7 +112,7 @@ export default function GalleryItemPage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось удалить растение"
+          : t("deletePlantFailed")
       );
     } finally {
       setSaving(false);
@@ -122,7 +124,7 @@ export default function GalleryItemPage() {
       <Layout>
         <div className="page">
           <div className="container">
-            <div className="card">Загрузка растения...</div>
+            <div className="card">{t("loadingPlant")}</div>
           </div>
         </div>
       </Layout>
@@ -136,7 +138,7 @@ export default function GalleryItemPage() {
           <div className="container">
             <Link to="/gallery" className="back-link">
               <ArrowLeft size={18} />
-              <span>Назад в галерею</span>
+              <span>{t("backToGallery")}</span>
             </Link>
 
             <div className="card error">{error}</div>
@@ -155,7 +157,7 @@ export default function GalleryItemPage() {
         <div className="container">
           <Link to="/gallery" className="back-link">
             <ArrowLeft size={18} />
-            <span>Назад в галерею</span>
+            <span>{t("backToGallery")}</span>
           </Link>
 
           <div className="plant-detail-grid">
@@ -168,7 +170,7 @@ export default function GalleryItemPage() {
                 />
               ) : (
                 <div className="plant-detail-image-placeholder">
-                  Нет изображения
+                  {t("noImage")}
                 </div>
               )}
 
@@ -177,7 +179,7 @@ export default function GalleryItemPage() {
 
               <form className="form" onSubmit={handleUpdate}>
                 <label>
-                  Название в галерее
+                  {t("galleryPlantName")}
                   <input
                     className="input"
                     value={customName}
@@ -187,7 +189,7 @@ export default function GalleryItemPage() {
                 </label>
 
                 <button className="button" type="submit" disabled={saving}>
-                  {saving ? "Сохранение..." : "Сохранить название"}
+                  {saving ? t("savingName") : t("saveName")}
                 </button>
               </form>
 
@@ -198,7 +200,7 @@ export default function GalleryItemPage() {
                 disabled={saving}
               >
                 <Trash2 size={18} />
-                <span>Удалить из галереи</span>
+                <span>{t("deleteFromGallery")}</span>
               </button>
 
               {message && <p className="success">{message}</p>}
@@ -207,29 +209,29 @@ export default function GalleryItemPage() {
 
             <div className="plant-detail-content">
               <div className="card">
-                <h2>Рекомендации по уходу</h2>
+                <h2>{t("careRecommendations")}</h2>
 
                 <div className="detail-list">
                   <div>
-                    <strong>Описание:</strong>
+                    <strong>{t("description")}</strong>
                     <p>{plant.description}</p>
                   </div>
 
                   <div>
-                    <strong>Полив:</strong>
+                    <strong>{t("watering")}</strong>
                     <p>
-                      {plant.watering_info} Интервал: каждые{" "}
-                      {plant.watering_interval_days} дн.
+                      {plant.watering_info} {t("interval")}{" "}
+                      {t("everyDays", { days: plant.watering_interval_days })}
                     </p>
                   </div>
 
                   <div>
-                    <strong>Освещение:</strong>
+                    <strong>{t("lighting")}</strong>
                     <p>{plant.light_info}</p>
                   </div>
 
                   <div>
-                    <strong>Температура:</strong>
+                    <strong>{t("temperature")}</strong>
                     <p>
                       {plant.min_temperature_celsius}–
                       {plant.max_temperature_celsius} °C
@@ -237,53 +239,55 @@ export default function GalleryItemPage() {
                   </div>
 
                   <div>
-                    <strong>Влажность:</strong>
+                    <strong>{t("humidity")}</strong>
                     <p>{plant.humidity_info}</p>
                   </div>
 
                   <div>
-                    <strong>Грунт:</strong>
+                    <strong>{t("soil")}</strong>
                     <p>{plant.soil_info}</p>
                   </div>
 
                   <div>
-                    <strong>Удобрение:</strong>
+                    <strong>{t("fertilizer")}</strong>
                     <p>
-                      {plant.fertilizing_info} Интервал: каждые{" "}
-                      {plant.fertilizing_interval_days} дн.
+                      {plant.fertilizing_info} {t("interval")}{" "}
+                      {t("everyDays", {
+                        days: plant.fertilizing_interval_days,
+                      })}
                     </p>
                   </div>
 
                   <div>
-                    <strong>Общий уход:</strong>
+                    <strong>{t("generalCare")}</strong>
                     <p>{plant.care_info}</p>
                   </div>
 
                   <div>
-                    <strong>Полезная информация:</strong>
+                    <strong>{t("usefulInfo")}</strong>
                     <p>{plant.useful_info}</p>
                   </div>
                 </div>
               </div>
 
               <div className="card">
-                <h2>Полив</h2>
+                <h2>{t("wateringTitle")}</h2>
 
                 <div className="watering-summary">
                   <div>
-                    <span className="muted">Последний полив</span>
-                    <strong>{item.last_watered_at || "Не отмечался"}</strong>
+                    <span className="muted">{t("lastWatering")}</span>
+                    <strong>{item.last_watered_at || t("notMarked")}</strong>
                   </div>
 
                   <div>
-                    <span className="muted">Следующий полив</span>
-                    <strong>{item.next_watering_date || "Не запланирован"}</strong>
+                    <span className="muted">{t("nextWateringPlain")}</span>
+                    <strong>{item.next_watering_date || t("notPlanned")}</strong>
                   </div>
                 </div>
 
                 <div className="plant-events">
                   {wateringEvents.length === 0 && (
-                    <p className="muted">События полива не найдены.</p>
+                    <p className="muted">{t("wateringEventsNotFound")}</p>
                   )}
 
                   {wateringEvents.slice(0, 5).map((event) => (
@@ -301,7 +305,7 @@ export default function GalleryItemPage() {
                 </div>
 
                 <Link to="/care" className="button secondary">
-                  Все события полива
+                  {t("allWateringEvents")}
                 </Link>
               </div>
             </div>

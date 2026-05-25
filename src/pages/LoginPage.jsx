@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Eye, EyeOff, Leaf, Lock, Mail } from "lucide-react";
 
+import LanguageToggle from "../components/LanguageToggle";
 import { loginUser } from "../api/authApi";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [form, setForm] = useState({
     email: "",
@@ -53,16 +56,17 @@ export default function LoginPage() {
         <Leaf size={22} fill="currentColor" />
         <span>PlantCare</span>
       </Link>
+      <LanguageToggle className="auth-language-toggle" />
 
       <div className="auth-card">
-        <h1 className="auth-title">С возвращением</h1>
+        <h1 className="auth-title">{t("loginTitle")}</h1>
         <p className="auth-subtitle">
-          Войдите в свой ботанический кабинет
+          {t("loginSubtitle")}
         </p>
 
         <form className="form auth-form" onSubmit={handleSubmit}>
           <label className="field">
-            <span>Email</span>
+            <span>{t("email")}</span>
             <span className="input-shell">
               <Mail size={20} />
               <input
@@ -78,7 +82,7 @@ export default function LoginPage() {
           </label>
 
           <label className="field">
-            <span>Пароль</span>
+            <span>{t("password")}</span>
             <span className="input-shell">
               <Lock size={20} />
               <input
@@ -87,14 +91,16 @@ export default function LoginPage() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                placeholder="Введите пароль"
+                placeholder={t("passwordPlaceholder")}
                 required
               />
               <button
                 className="password-toggle"
                 type="button"
                 onClick={() => setShowPassword((value) => !value)}
-                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                aria-label={
+                  showPassword ? t("hidePassword") : t("showPassword")
+                }
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -104,13 +110,13 @@ export default function LoginPage() {
           {error && <div className="error">{error}</div>}
 
           <button className="button auth-submit" type="submit" disabled={loading}>
-            <span>{loading ? "Вход..." : "Войти"}</span>
+            <span>{loading ? t("loginLoading") : t("loginSubmit")}</span>
             <ArrowRight size={20} />
           </button>
         </form>
 
         <p className="auth-footer">
-          Нет аккаунта? <Link to="/register">Создать аккаунт</Link>
+          {t("loginFooter")} <Link to="/register">{t("loginFooterLink")}</Link>
         </p>
       </div>
     </div>

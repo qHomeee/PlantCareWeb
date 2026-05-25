@@ -72,6 +72,30 @@
   color: #b0000b;
 }
 
+.language-toggle {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #ffffff;
+  color: var(--green);
+  font-weight: 900;
+}
+
+.language-toggle:hover {
+  background: var(--surface-soft);
+}
+
+.sidebar-language-toggle {
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 12px;
+}
+
 .main-content {
   min-width: 0;
 }
@@ -97,6 +121,10 @@
   }
 
   .logout-button {
+    margin-top: 14px;
+  }
+
+  .sidebar-language-toggle {
     margin-top: 14px;
   }
 }

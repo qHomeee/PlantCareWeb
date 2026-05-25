@@ -4,10 +4,12 @@ import { ImagePlus, UploadCloud } from "lucide-react";
 
 import Layout from "../components/Layout";
 import { recognizePlant, mockRecognizePlant } from "../api/plantsApi";
+import { useLanguage } from "../i18n/LanguageContext";
 import { getMediaUrl } from "../utils/media";
 
 export default function RecognizePage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -34,7 +36,7 @@ export default function RecognizePage() {
     event.preventDefault();
 
     if (!file) {
-      setError("Выберите изображение растения");
+      setError(t("selectPlantImage"));
       return;
     }
 
@@ -50,7 +52,7 @@ export default function RecognizePage() {
 
       const detail = error.response?.data?.detail;
       setError(
-        typeof detail === "string" ? detail : "Не удалось распознать растение"
+        typeof detail === "string" ? detail : t("recognizeFailed")
       );
     } finally {
       setLoading(false);
@@ -72,7 +74,7 @@ export default function RecognizePage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось выполнить тестовое распознавание"
+          : t("mockRecognizeFailed")
       );
     } finally {
       setLoading(false);
@@ -93,16 +95,15 @@ export default function RecognizePage() {
       <div className="page">
         <div className="container">
           <div className="page-header">
-            <h1 className="page-title">Распознавание растения</h1>
+            <h1 className="page-title">{t("recognizeTitle")}</h1>
             <p className="page-subtitle">
-              Загрузите фотографию растения, чтобы определить его вид и получить
-              рекомендации по уходу.
+              {t("recognizeSubtitle")}
             </p>
           </div>
 
           <div className="recognize-grid">
             <div className="card">
-              <h2>Загрузка фото</h2>
+              <h2>{t("uploadTitle")}</h2>
 
               <form className="form" onSubmit={handleRecognize}>
                 <label className="upload-dropzone">
@@ -126,18 +127,18 @@ export default function RecognizePage() {
 
                   <span className="upload-copy">
                     <strong>
-                      {file ? file.name : "Выберите фото растения"}
+                      {file ? file.name : t("choosePlantPhoto")}
                     </strong>
                     <small>
                       {file
-                        ? "Нажмите, чтобы заменить изображение"
-                        : "JPEG, PNG или WebP. Лучше использовать четкое фото листьев."}
+                        ? t("replacePlantPhoto")
+                        : t("uploadHint")}
                     </small>
                   </span>
 
                   <span className="upload-action">
                     <ImagePlus size={18} />
-                    Обзор
+                    {t("browse")}
                   </span>
                 </label>
 
@@ -145,7 +146,7 @@ export default function RecognizePage() {
 
                 <div className="recognize-actions">
                   <button className="button full" type="submit" disabled={loading}>
-                    {loading ? "Распознавание..." : "Распознать растение"}
+                    {loading ? t("recognizeLoading") : t("recognizePlant")}
                   </button>
 
                   <button
@@ -154,18 +155,18 @@ export default function RecognizePage() {
                     onClick={handleMockRecognize}
                     disabled={loading}
                   >
-                    Тестовое распознавание
+                    {t("testRecognition")}
                   </button>
                 </div>
               </form>
             </div>
 
             <div className="card">
-              <h2>Результат</h2>
+              <h2>{t("result")}</h2>
 
               {!result && (
                 <p className="muted">
-                  После распознавания здесь появится информация о растении.
+                  {t("resultEmpty")}
                 </p>
               )}
 
@@ -186,28 +187,30 @@ export default function RecognizePage() {
 
                     <div className="info-list">
                       <div>
-                        <strong>Уверенность:</strong>{" "}
+                        <strong>{t("confidence")}</strong>{" "}
                         {Math.round(result.confidence * 100)}%
                       </div>
 
                       <div>
-                        <strong>Полив:</strong> каждые{" "}
-                        {result.watering_interval_days} дн.
+                        <strong>{t("watering")}</strong>{" "}
+                        {t("everyDays", {
+                          days: result.watering_interval_days,
+                        })}
                       </div>
 
                       <div>
-                        <strong>Температура:</strong>{" "}
+                        <strong>{t("temperature")}</strong>{" "}
                         {result.min_temperature_celsius}–
                         {result.max_temperature_celsius} °C
                       </div>
 
                       <div>
-                        <strong>Освещение:</strong> {result.light_info}
+                        <strong>{t("lighting")}</strong> {result.light_info}
                       </div>
                     </div>
 
                     <button className="button" onClick={handleConfirm}>
-                      Подтвердить и продолжить
+                      {t("confirmAndContinue")}
                     </button>
                   </div>
                 </div>

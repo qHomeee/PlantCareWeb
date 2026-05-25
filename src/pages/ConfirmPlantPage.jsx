@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 import Layout from "../components/Layout";
 import { addToGallery } from "../api/galleryApi";
+import { useLanguage } from "../i18n/LanguageContext";
 import { getMediaUrl } from "../utils/media";
 
 export default function ConfirmPlantPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [plant, setPlant] = useState(null);
   const [customName, setCustomName] = useState("");
@@ -61,7 +63,7 @@ export default function ConfirmPlantPage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось добавить растение в галерею"
+          : t("addToGalleryFailed")
       );
     } finally {
       setLoading(false);
@@ -73,7 +75,7 @@ export default function ConfirmPlantPage() {
       <Layout>
         <div className="page">
           <div className="confirm-container">
-            <div className="card">Загрузка результата распознавания...</div>
+            <div className="card">{t("loadingRecognitionResult")}</div>
           </div>
         </div>
       </Layout>
@@ -85,9 +87,9 @@ export default function ConfirmPlantPage() {
       <div className="page">
         <div className="confirm-container">
           <div className="page-header">
-            <h1 className="page-title">Подтверждение растения</h1>
+            <h1 className="page-title">{t("confirmPlantTitle")}</h1>
             <p className="page-subtitle">
-              Проверьте результат распознавания и добавьте растение в галерею.
+              {t("confirmPlantSubtitle")}
             </p>
           </div>
 
@@ -108,40 +110,40 @@ export default function ConfirmPlantPage() {
 
               <div className="info-list">
                 <div>
-                  <strong>Уверенность:</strong>{" "}
+                  <strong>{t("confidence")}</strong>{" "}
                   {Math.round(plant.confidence * 100)}%
                 </div>
 
                 <div>
-                  <strong>Температура:</strong>{" "}
+                  <strong>{t("temperature")}</strong>{" "}
                   {plant.min_temperature_celsius}–
                   {plant.max_temperature_celsius} °C
                 </div>
 
                 <div>
-                  <strong>Полив:</strong> каждые{" "}
-                  {plant.watering_interval_days} дн.
+                  <strong>{t("watering")}</strong>{" "}
+                  {t("everyDays", { days: plant.watering_interval_days })}
                 </div>
 
                 <div>
-                  <strong>Удобрение:</strong> каждые{" "}
-                  {plant.fertilizing_interval_days} дн.
+                  <strong>{t("fertilizer")}</strong>{" "}
+                  {t("everyDays", { days: plant.fertilizing_interval_days })}
                 </div>
               </div>
             </div>
 
             <div className="card">
-              <h2>Добавление в галерею</h2>
+              <h2>{t("addToGalleryTitle")}</h2>
 
               <form className="form" onSubmit={handleSubmit}>
                 <label>
-                  Название в вашей галерее
+                  {t("galleryNameLabel")}
                   <input
                     className="input"
                     type="text"
                     value={customName}
                     onChange={(event) => setCustomName(event.target.value)}
-                    placeholder="Например: Монстера у окна"
+                    placeholder={t("galleryNamePlaceholder")}
                     maxLength={255}
                   />
                 </label>
@@ -149,7 +151,7 @@ export default function ConfirmPlantPage() {
                 {error && <div className="error">{error}</div>}
 
                 <button className="button full" type="submit" disabled={loading}>
-                  {loading ? "Добавление..." : "Добавить в галерею"}
+                  {loading ? t("addingToGallery") : t("addToGallery")}
                 </button>
 
                 <button
@@ -158,31 +160,31 @@ export default function ConfirmPlantPage() {
                   onClick={() => navigate("/recognize")}
                   disabled={loading}
                 >
-                  Распознать другое фото
+                  {t("recognizeAnotherPhoto")}
                 </button>
               </form>
 
               <div className="care-preview">
-                <h3>Краткие рекомендации</h3>
+                <h3>{t("shortCareTips")}</h3>
 
                 <p>
-                  <strong>Свет:</strong> {plant.light_info}
+                  <strong>{t("light")}</strong> {plant.light_info}
                 </p>
 
                 <p>
-                  <strong>Влажность:</strong> {plant.humidity_info}
+                  <strong>{t("humidity")}</strong> {plant.humidity_info}
                 </p>
 
                 <p>
-                  <strong>Грунт:</strong> {plant.soil_info}
+                  <strong>{t("soil")}</strong> {plant.soil_info}
                 </p>
 
                 <p>
-                  <strong>Уход:</strong> {plant.care_info}
+                  <strong>{t("care")}</strong> {plant.care_info}
                 </p>
 
                 <p>
-                  <strong>Полезно:</strong> {plant.useful_info}
+                  <strong>{t("useful")}</strong> {plant.useful_info}
                 </p>
               </div>
             </div>

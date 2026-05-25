@@ -8,30 +8,32 @@ import {
   skipWateringEvent,
 } from "../api/careApi";
 import { getGallery } from "../api/galleryApi";
+import { useLanguage } from "../i18n/LanguageContext";
 
-const STATUS_LABELS = {
-  planned: "Запланирован",
-  completed: "Выполнен",
-  skipped: "Пропущен",
+const STATUS_LABEL_KEYS = {
+  planned: "statusPlanned",
+  completed: "statusCompleted",
+  skipped: "statusSkipped",
 };
 
-function formatDate(value) {
+function formatDate(value, locale, fallback) {
   if (!value) {
-    return "—";
+    return fallback;
   }
 
-  return new Date(value).toLocaleDateString("ru-RU");
+  return new Date(value).toLocaleDateString(locale);
 }
 
-function formatDateTime(value) {
+function formatDateTime(value, locale, fallback) {
   if (!value) {
-    return "—";
+    return fallback;
   }
 
-  return new Date(value).toLocaleString("ru-RU");
+  return new Date(value).toLocaleString(locale);
 }
 
 export default function CarePage() {
+  const { dateLocale, t } = useLanguage();
   const [events, setEvents] = useState([]);
   const [galleryItems, setGalleryItems] = useState([]);
 
@@ -82,7 +84,7 @@ export default function CarePage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось загрузить события полива"
+          : t("loadWateringEventsFailed")
       );
     } finally {
       setLoading(false);
@@ -98,7 +100,7 @@ export default function CarePage() {
     setError("");
 
     try {
-      await completeWateringEvent(eventId, "Полив выполнен через веб-сайт");
+      await completeWateringEvent(eventId, t("completeWateringNote"));
       await loadEvents();
     } catch (error) {
       console.log("COMPLETE WATERING ERROR:", error);
@@ -107,7 +109,7 @@ export default function CarePage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось отметить полив выполненным"
+          : t("completeWateringFailed")
       );
     } finally {
       setActionLoadingId(null);
@@ -119,14 +121,14 @@ export default function CarePage() {
     setError("");
 
     try {
-      await skipWateringEvent(eventId, "Полив пропущен через веб-сайт");
+      await skipWateringEvent(eventId, t("skipWateringNote"));
       await loadEvents();
     } catch (error) {
       console.log("SKIP WATERING ERROR:", error);
 
       const detail = error.response?.data?.detail;
       setError(
-        typeof detail === "string" ? detail : "Не удалось пропустить полив"
+        typeof detail === "string" ? detail : t("skipWateringFailed")
       );
     } finally {
       setActionLoadingId(null);
@@ -139,9 +141,9 @@ export default function CarePage() {
         <div className="care-container">
           <div className="page-header care-header">
             <div>
-              <h1 className="page-title">Полив</h1>
+              <h1 className="page-title">{t("careTitle")}</h1>
               <p className="page-subtitle">
-                События ухода за растениями из вашей галереи.
+                {t("careSubtitle")}
               </p>
             </div>
 
@@ -151,10 +153,10 @@ export default function CarePage() {
                 value={statusFilter}
                 onChange={(event) => setStatusFilter(event.target.value)}
               >
-                <option value="">Все события</option>
-                <option value="planned">Запланированные</option>
-                <option value="completed">Выполненные</option>
-                <option value="skipped">Пропущенные</option>
+                <option value="">{t("allEvents")}</option>
+                <option value="planned">{t("plannedEvents")}</option>
+                <option value="completed">{t("completedEvents")}</option>
+                <option value="skipped">{t("skippedEvents")}</option>
               </select>
 
               <select
@@ -162,13 +164,13 @@ export default function CarePage() {
                 value={plantFilter}
                 onChange={(event) => setPlantFilter(event.target.value)}
               >
-                <option value="">Все растения</option>
+                <option value="">{t("allPlants")}</option>
 
                 {galleryItems.map((item) => {
                   const plantName =
                     item.custom_name ||
                     item.plant?.common_name ||
-                    `Растение #${item.id}`;
+                    `${t("plantFallback")} #${item.id}`;
 
                   return (
                     <option key={item.id} value={item.id}>
@@ -180,7 +182,7 @@ export default function CarePage() {
             </div>
           </div>
 
-          {loading && <div className="card">Загрузка событий полива...</div>}
+          {loading && <div className="card">{t("loadingWateringEvents")}</div>}
 
           {error && <div className="card error">{error}</div>}
 
@@ -190,10 +192,10 @@ export default function CarePage() {
                 <Droplets size={42} />
               </div>
 
-              <h2>Событий полива не найдено</h2>
+              <h2>{t("wateringEventsEmptyTitle")}</h2>
 
               <p className="muted">
-                Измените фильтр или добавьте растение в галерею.
+                {t("wateringEventsEmptyText")}
               </p>
             </div>
           )}
@@ -209,7 +211,7 @@ export default function CarePage() {
                 const plantName =
                   userPlant?.custom_name ||
                   userPlant?.plant?.common_name ||
-                  `Растение #${event.user_plant_id}`;
+                  `${t("plantFallback")} #${event.user_plant_id}`;
 
                 const scientificName = userPlant?.plant?.scientific_name;
 
@@ -217,7 +219,9 @@ export default function CarePage() {
                   <div key={event.id} className="card care-event">
                     <div className="care-event-main">
                       <div className={`care-status care-status-${event.status}`}>
-                        {STATUS_LABELS[event.status] || event.status}
+                        {STATUS_LABEL_KEYS[event.status]
+                          ? t(STATUS_LABEL_KEYS[event.status])
+                          : event.status}
                       </div>
 
                       <h2 className="care-event-title">{plantName}</h2>
@@ -228,20 +232,20 @@ export default function CarePage() {
 
                       <div className="care-event-info">
                         <div>
-                          <strong>Дата полива:</strong>{" "}
-                          {formatDate(event.scheduled_date)}
+                          <strong>{t("wateringDate")}</strong>{" "}
+                          {formatDate(event.scheduled_date, dateLocale, t("dash"))}
                         </div>
 
                         {event.completed_at && (
                           <div>
-                            <strong>Выполнено:</strong>{" "}
-                            {formatDateTime(event.completed_at)}
+                            <strong>{t("completedAt")}</strong>{" "}
+                            {formatDateTime(event.completed_at, dateLocale, t("dash"))}
                           </div>
                         )}
 
                         {event.note && (
                           <div>
-                            <strong>Заметка:</strong> {event.note}
+                            <strong>{t("note")}</strong> {event.note}
                           </div>
                         )}
                       </div>
@@ -257,7 +261,7 @@ export default function CarePage() {
                         >
                           <Check size={18} />
                           <span>
-                            {isActionLoading ? "Обработка..." : "Выполнено"}
+                            {isActionLoading ? t("processing") : t("completedAction")}
                           </span>
                         </button>
 
@@ -268,7 +272,7 @@ export default function CarePage() {
                           disabled={isActionLoading}
                         >
                           <SkipForward size={18} />
-                          <span>Пропустить</span>
+                          <span>{t("skipAction")}</span>
                         </button>
                       </div>
                     )}

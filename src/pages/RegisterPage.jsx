@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Eye, EyeOff, Leaf, Lock, Mail, User } from "lucide-react";
 
+import LanguageToggle from "../components/LanguageToggle";
 import { registerUser } from "../api/authApi";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [form, setForm] = useState({
     email: "",
@@ -68,17 +71,18 @@ export default function RegisterPage() {
         <Leaf size={22} fill="currentColor" />
         <span>PlantCare</span>
       </Link>
+      <LanguageToggle className="auth-language-toggle" />
 
       <div className="auth-card auth-card-register">
-        <h1 className="auth-title">Создать аккаунт</h1>
+        <h1 className="auth-title">{t("registerTitle")}</h1>
 
         <p className="auth-subtitle">
-          Присоединяйтесь к сообществу любителей растений
+          {t("registerSubtitle")}
         </p>
 
         <form className="form auth-form" onSubmit={handleSubmit}>
           <label className="field">
-            <span>Имя пользователя</span>
+            <span>{t("username")}</span>
             <span className="input-shell">
               <User size={20} />
               <input
@@ -87,7 +91,7 @@ export default function RegisterPage() {
                 name="username"
                 value={form.username}
                 onChange={handleChange}
-                placeholder="Анна"
+                placeholder={t("usernamePlaceholder")}
                 required
                 minLength={2}
                 maxLength={100}
@@ -96,7 +100,7 @@ export default function RegisterPage() {
           </label>
 
           <label className="field">
-            <span>Email</span>
+            <span>{t("email")}</span>
             <span className="input-shell">
               <Mail size={20} />
               <input
@@ -112,7 +116,7 @@ export default function RegisterPage() {
           </label>
 
           <label className="field">
-            <span>Пароль</span>
+            <span>{t("password")}</span>
             <span className="input-shell">
               <Lock size={20} />
               <input
@@ -121,7 +125,7 @@ export default function RegisterPage() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                placeholder="Минимум 6 символов"
+                placeholder={t("passwordMinPlaceholder")}
                 required
                 minLength={6}
               />
@@ -129,7 +133,9 @@ export default function RegisterPage() {
                 className="password-toggle"
                 type="button"
                 onClick={() => setShowPassword((value) => !value)}
-                aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                aria-label={
+                  showPassword ? t("hidePassword") : t("showPassword")
+                }
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -139,13 +145,16 @@ export default function RegisterPage() {
           {error && <div className="error">{error}</div>}
 
           <button className="button auth-submit" type="submit" disabled={loading}>
-            <span>{loading ? "Регистрация..." : "Зарегистрироваться"}</span>
+            <span>
+              {loading ? t("registerLoading") : t("registerSubmit")}
+            </span>
             <ArrowRight size={20} />
           </button>
         </form>
 
         <p className="auth-footer">
-          Уже есть аккаунт? <Link to="/login">Войти</Link>
+          {t("registerFooter")}{" "}
+          <Link to="/login">{t("registerFooterLink")}</Link>
         </p>
       </div>
     </div>

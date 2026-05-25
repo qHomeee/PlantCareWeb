@@ -48,6 +48,13 @@
   font-weight: 900;
 }
 
+.auth-language-toggle {
+  position: fixed;
+  z-index: 1;
+  top: 146px;
+  right: calc(50% - 456px);
+}
+
 .auth-card {
   position: relative;
   z-index: 1;
@@ -124,6 +131,11 @@
   .auth-brand {
     top: 32px;
     left: 24px;
+  }
+
+  .auth-language-toggle {
+    top: 28px;
+    right: 24px;
   }
 }
 

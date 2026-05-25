@@ -15,12 +15,13 @@ import {
 
 import Layout from "../components/Layout";
 import { getGallery } from "../api/galleryApi";
+import { useLanguage } from "../i18n/LanguageContext";
 import { getMediaUrl } from "../utils/media";
 
-const FILTERS = {
-  all: "Все растения",
-  needsWater: "Нужен полив",
-  ok: "По расписанию",
+const FILTER_KEYS = {
+  all: "filterAll",
+  needsWater: "filterNeedsWater",
+  ok: "filterOk",
 };
 
 function isWateringDue(item) {
@@ -40,21 +41,26 @@ function isWateringDue(item) {
   return nextWatering <= today;
 }
 
-function getWateringLabel(item) {
+function getWateringLabel(item, t, dateLocale) {
   if (isWateringDue(item)) {
-    return "Нужен полив";
+    return t("wateringDue");
   }
 
   if (item.next_watering_date) {
-    return `Следующий полив: ${new Date(
+    return t("nextWatering", {
+      date: new Date(
       `${item.next_watering_date}T00:00:00`
-    ).toLocaleDateString("ru-RU")}`;
+      ).toLocaleDateString(dateLocale),
+    });
   }
 
-  return `Интервал полива: ${item.plant?.watering_interval_days || 0} дн.`;
+  return t("wateringInterval", {
+    days: item.plant?.watering_interval_days || 0,
+  });
 }
 
 export default function GalleryPage() {
+  const { dateLocale, t } = useLanguage();
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -77,7 +83,7 @@ export default function GalleryPage() {
       setError(
         typeof detail === "string"
           ? detail
-          : "Не удалось загрузить галерею"
+          : t("loadGalleryFailed")
       );
     } finally {
       setLoading(false);
@@ -127,7 +133,7 @@ export default function GalleryPage() {
       <div className="page">
         <div className="gallery-container">
           <div className="page-header gallery-header">
-            <h1 className="page-title">Мои растения</h1>
+            <h1 className="page-title">{t("galleryTitle")}</h1>
           </div>
 
           <div className="gallery-toolbar">
@@ -137,7 +143,7 @@ export default function GalleryPage() {
                 type="search"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Поиск по коллекции..."
+                placeholder={t("searchPlaceholder")}
               />
             </label>
 
@@ -149,12 +155,12 @@ export default function GalleryPage() {
                 aria-expanded={isFilterOpen}
               >
                 <SlidersHorizontal size={18} />
-                <span>{FILTERS[filterMode]}</span>
+                <span>{t(FILTER_KEYS[filterMode])}</span>
               </button>
 
               {isFilterOpen && (
                 <div className="filter-menu">
-                  {Object.entries(FILTERS).map(([value, label]) => (
+                  {Object.entries(FILTER_KEYS).map(([value, labelKey]) => (
                     <button
                       key={value}
                       className={filterMode === value ? "active" : ""}
@@ -164,7 +170,7 @@ export default function GalleryPage() {
                         setIsFilterOpen(false);
                       }}
                     >
-                      {label}
+                      {t(labelKey)}
                     </button>
                   ))}
                 </div>
@@ -175,7 +181,7 @@ export default function GalleryPage() {
           <div className="stats-grid">
             <div className="stat-card">
               <div>
-                <span>Всего растений</span>
+                <span>{t("totalPlants")}</span>
                 <strong>{plants.length}</strong>
               </div>
               <Sprout size={24} />
@@ -183,7 +189,7 @@ export default function GalleryPage() {
 
             <div className="stat-card stat-card-alert">
               <div>
-                <span>Нужен полив</span>
+                <span>{t("needsWater")}</span>
                 <strong>
                   {wateringCount}
                 </strong>
@@ -192,7 +198,7 @@ export default function GalleryPage() {
             </div>
           </div>
 
-          {loading && <div className="card">Загрузка галереи...</div>}
+          {loading && <div className="card">{t("loadingGallery")}</div>}
 
           {error && <div className="card error">{error}</div>}
 
@@ -202,14 +208,14 @@ export default function GalleryPage() {
                 <Leaf size={42} />
               </div>
 
-              <h2>В галерее пока нет растений</h2>
+              <h2>{t("emptyGalleryTitle")}</h2>
 
               <p className="muted">
-                Распознайте первое растение и добавьте его в свою коллекцию.
+                {t("emptyGalleryText")}
               </p>
 
               <Link to="/recognize" className="button">
-                Распознать растение
+                {t("recognizePlant")}
               </Link>
             </div>
           )}
@@ -217,14 +223,14 @@ export default function GalleryPage() {
           {!loading && !error && plants.length > 0 && (
             <>
               <div className="collection-heading">
-                <h2>Ваша коллекция</h2>
+                <h2>{t("collectionTitle")}</h2>
 
                 <div className="view-toggle">
                   <button
                     className={viewMode === "grid" ? "active" : ""}
                     type="button"
                     onClick={() => setViewMode("grid")}
-                    aria-label="Показать сеткой"
+                    aria-label={t("gridView")}
                   >
                     <Grid3X3 size={20} />
                   </button>
@@ -232,7 +238,7 @@ export default function GalleryPage() {
                     className={viewMode === "list" ? "active" : ""}
                     type="button"
                     onClick={() => setViewMode("list")}
-                    aria-label="Показать списком"
+                    aria-label={t("listView")}
                   >
                     <List size={20} />
                   </button>
@@ -244,9 +250,9 @@ export default function GalleryPage() {
                   <div className="empty-icon">
                     <Search size={42} />
                   </div>
-                  <h2>Ничего не найдено</h2>
+                  <h2>{t("noResultsTitle")}</h2>
                   <p className="muted">
-                    Попробуйте изменить поисковый запрос или фильтр.
+                    {t("noResultsText")}
                   </p>
                 </div>
               )}
@@ -255,7 +261,9 @@ export default function GalleryPage() {
                 <div className={`gallery-grid gallery-grid-${viewMode}`}>
                   {filteredPlants.map((item) => {
                     const title =
-                      item.custom_name || item.plant?.common_name || "Растение";
+                      item.custom_name ||
+                      item.plant?.common_name ||
+                      t("plantFallback");
 
                     const subtitle = item.plant?.scientific_name || "";
 
@@ -288,12 +296,12 @@ export default function GalleryPage() {
                               ) : (
                                 <Droplet size={16} />
                               )}
-                              {getWateringLabel(item)}
+                              {getWateringLabel(item, t, dateLocale)}
                             </span>
 
                             <span>
                               <Sun size={16} />
-                              {item.plant?.light_info || "Средний свет"}
+                              {item.plant?.light_info || t("mediumLight")}
                             </span>
                           </div>
                         </div>
@@ -305,7 +313,7 @@ export default function GalleryPage() {
             </>
           )}
 
-          <Link to="/recognize" className="fab" aria-label="Добавить растение">
+          <Link to="/recognize" className="fab" aria-label={t("addPlant")}>
             <ImagePlus size={26} />
           </Link>
         </div>

@@ -1,8 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Leaf, LogOut, Sprout, User } from "lucide-react";
 
+import LanguageToggle from "./LanguageToggle";
+import { useLanguage } from "../i18n/LanguageContext";
+
 export default function Layout({ children }) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   function handleLogout() {
     localStorage.removeItem("access_token");
@@ -20,18 +24,20 @@ export default function Layout({ children }) {
         <nav className="nav">
           <NavLink to="/gallery" className="nav-link">
             <Sprout size={20} />
-            <span>Мои растения</span>
+            <span>{t("navPlants")}</span>
           </NavLink>
 
           <NavLink to="/profile" className="nav-link">
             <User size={20} />
-            <span>Профиль</span>
+            <span>{t("navProfile")}</span>
           </NavLink>
         </nav>
 
+        <LanguageToggle className="sidebar-language-toggle" />
+
         <button className="logout-button" onClick={handleLogout}>
           <LogOut size={20} />
-          <span>Выйти</span>
+          <span>{t("logout")}</span>
         </button>
       </aside>
 

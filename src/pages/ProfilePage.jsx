@@ -3,9 +3,11 @@ import { BriefcaseBusiness, Pencil } from "lucide-react";
 
 import Layout from "../components/Layout";
 import { getMe, updateMe, uploadAvatar } from "../api/usersApi";
+import { useLanguage } from "../i18n/LanguageContext";
 import { getMediaUrl } from "../utils/media";
 
 export default function ProfilePage() {
+  const { t } = useLanguage();
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
@@ -26,7 +28,7 @@ export default function ProfilePage() {
       setUsername(data.username);
     } catch (error) {
       console.log("GET ME ERROR:", error);
-      setError("Не удалось загрузить профиль");
+      setError(t("loadProfileFailed"));
     } finally {
       setLoading(false);
     }
@@ -49,10 +51,10 @@ export default function ProfilePage() {
       });
 
       setUser(updatedUser);
-      setMessage("Профиль обновлен");
+      setMessage(t("profileUpdated"));
     } catch (error) {
       console.log("UPDATE PROFILE ERROR:", error);
-      setError("Не удалось обновить профиль");
+      setError(t("updateProfileFailed"));
     } finally {
       setSaving(false);
     }
@@ -62,7 +64,7 @@ export default function ProfilePage() {
     event.preventDefault();
 
     if (!avatarFile) {
-      setError("Выберите файл аватара");
+      setError(t("selectAvatarFile"));
       return;
     }
 
@@ -75,12 +77,14 @@ export default function ProfilePage() {
 
       setUser(updatedUser);
       setAvatarFile(null);
-      setMessage("Аватар обновлен");
+      setMessage(t("avatarUpdated"));
     } catch (error) {
       console.log("UPLOAD AVATAR ERROR:", error);
 
       const detail = error.response?.data?.detail;
-      setError(typeof detail === "string" ? detail : "Не удалось загрузить аватар");
+      setError(
+        typeof detail === "string" ? detail : t("uploadAvatarFailed")
+      );
     } finally {
       setSaving(false);
     }
@@ -91,13 +95,13 @@ export default function ProfilePage() {
       <div className="page">
         <div className="container">
           <div className="page-header">
-            <h1 className="page-title">Профиль</h1>
+            <h1 className="page-title">{t("profileTitle")}</h1>
             <p className="page-subtitle">
-              Управление личными данными пользователя.
+              {t("profileSubtitle")}
             </p>
           </div>
 
-          {loading && <div className="card">Загрузка профиля...</div>}
+          {loading && <div className="card">{t("loadingProfile")}</div>}
 
           {!loading && user && (
             <>
@@ -109,7 +113,7 @@ export default function ProfilePage() {
                         <img
                           className="avatar-image"
                           src={getMediaUrl(user.avatar_url)}
-                          alt="Аватар профиля"
+                          alt={t("profileAvatarAlt")}
                         />
                       ) : (
                         <div className="avatar-placeholder">
@@ -127,7 +131,7 @@ export default function ProfilePage() {
                       <label
                         htmlFor="avatar-file"
                         className="avatar-edit"
-                        aria-label="Выбрать аватар"
+                        aria-label={t("chooseAvatar")}
                       >
                         <Pencil size={18} />
                       </label>
@@ -139,7 +143,7 @@ export default function ProfilePage() {
                         type="submit"
                         disabled={saving}
                       >
-                        {saving ? "Загрузка..." : "Загрузить аватар"}
+                        {saving ? t("uploading") : t("uploadAvatar")}
                       </button>
                     )}
                   </form>
@@ -155,12 +159,12 @@ export default function ProfilePage() {
                 <div className="card profile-panel">
                   <h2>
                     <BriefcaseBusiness size={22} />
-                    <span>Личная информация</span>
+                    <span>{t("personalInfo")}</span>
                   </h2>
 
                   <form className="form" onSubmit={handleProfileSubmit}>
                     <label>
-                      Имя пользователя
+                      {t("username")}
                       <input
                         className="input"
                         type="text"
@@ -173,7 +177,7 @@ export default function ProfilePage() {
                     </label>
 
                     <button className="button full" type="submit" disabled={saving}>
-                      {saving ? "Сохранение..." : "Сохранить изменения"}
+                      {saving ? t("saving") : t("saveChanges")}
                     </button>
                   </form>
                 </div>
